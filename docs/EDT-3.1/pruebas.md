@@ -1,17 +1,20 @@
 # Pruebas y evidencias
 
-## Comprobaciones realizadas
+## Entorno verificado
 
-- PHP 8.5.0, Composer 2.8.12, Git 2.55.0 y Laravel 13.39.0 detectados.
-- Autocarga de Composer y arranque de Laravel comprobados con `php artisan --version`.
-- `tests/Unit/Edt31ModelRelationsTest.php` valida metadatos de relaciones principales sin requerir una BD.
+- PostgreSQL 17.11 local, base `mantenimiento_vehiculos` en `127.0.0.1:5433`.
+- PHP 8.5.12 NTS con `pdo_pgsql`, `pgsql`, `mbstring` y `openssl` habilitados para el proyecto.
+- Laravel 13.39.0 y Composer 2.8.12.
 
-## Impedimento registrado
+## Comandos ejecutados y resultado
 
-En la m谩quina de implementaci贸n no se detectaron `psql`, servicio PostgreSQL ni extensiones `pgsql`/`pdo_pgsql`. Por seguridad, no se cre贸 una base ni se ejecutaron migraciones. Tras instalar PostgreSQL y habilitar la extensi贸n, ejecute los comandos de `migraciones.md` y despu茅s:
+- `php artisan migrate --force`: 7 migraciones ejecutadas correctamente.
+- `php artisan db:seed --class=Edt31DemoSeeder --force`: seeder ficticio ejecutado correctamente.
+- `php artisan migrate:status`: las 7 migraciones figuran como `Ran` en el lote 1.
+- `php artisan test`: 5 pruebas exitosas y 10 aserciones.
 
-```powershell
-php artisan test
-```
+Las pruebas `PostgresPersistenceTest` y `PostgresForeignKeyTest` insertan datos ficticios, comprueban recuperaci髇 mediante relaciones Eloquent, y verifican restricciones de unicidad y claves for醤eas sobre PostgreSQL real.
 
-Las pruebas de persistencia (guardar, recuperar, claves for谩neas y unicidad) quedan pendientes hasta disponer de esa conexi贸n local.
+## Seguridad local
+
+La credencial y la clave de aplicaci髇 s髄o existen en `web/.env`, archivo ignorado por Git. No hay contrase馻s en migraciones, modelos, documentaci髇 ni commits.
