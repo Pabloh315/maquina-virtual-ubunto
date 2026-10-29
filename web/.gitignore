@@ -22,6 +22,7 @@
 /public/storage
 /storage/*.key
 /storage/pail
+/storage/framework/edt33-server.pid
 /vendor
 _ide_helper.php
 Homestead.json

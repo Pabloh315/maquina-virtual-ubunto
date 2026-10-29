@@ -7,7 +7,7 @@ import 'package:movil/app/autocare_app.dart';
 void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
   testWidgets('Recorrido Android y capturas de AutoCare', (tester) async {
-    await tester.pumpWidget(const AutoCareApp());
+    await tester.pumpWidget(const AutoCareApp(useMock: true));
     await tester.pumpAndSettle();
     await binding.convertFlutterSurfaceToImage();
     await tester.pumpAndSettle();
