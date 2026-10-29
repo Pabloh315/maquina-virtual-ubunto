@@ -1,0 +1,11 @@
+EVIDENCIA DE RUTAS API
+Comando: php artisan route:list --path=api --except-vendor --no-ansi
+
+GET|HEAD  api/database                  api.database
+GET|HEAD  api/health                    api.health
+GET|HEAD  api/v1/vehicles               api.v1.vehicles.index
+POST      api/v1/vehicles               api.v1.vehicles.store
+GET|HEAD  api/v1/vehicles/{vehicle}     api.v1.vehicles.show
+
+Total: 5 rutas.
+Nota: api/database solo se registra en local y testing.

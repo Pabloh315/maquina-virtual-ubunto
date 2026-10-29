@@ -1,0 +1,12 @@
+EVIDENCIA DE PRUEBAS
+Comando: php artisan test --compact
+
+Resultado: passed
+Pruebas: 16
+Aprobadas: 16
+Aserciones: 77
+Duración final observada: 3.006 s
+
+Formato:
+Pint --dirty --format agent: passed/fixed y repetido sin errores funcionales.
+Aislamiento: PostgreSQL en mantenimiento_vehiculos_test.

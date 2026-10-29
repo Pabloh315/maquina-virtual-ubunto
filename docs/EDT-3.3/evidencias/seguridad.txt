@@ -1,0 +1,16 @@
+EVIDENCIA DE SEGURIDAD DE DEPENDENCIAS
+
+composer validate --strict --no-check-publish
+Resultado: composer.json válido.
+
+composer audit --locked --no-interaction
+Resultado: no security vulnerability advisories found.
+
+Cambio aplicado:
+symfony/mime v8.1.7 -> v8.1.10 para corregir el aviso detectado durante la implementación.
+
+npm audit --audit-level=moderate
+Resultado: found 0 vulnerabilities.
+
+Comprobación local adicional:
+DB_PASSWORD y APP_KEY no aparecen fuera de .env/.env.testing y otras rutas ignoradas.

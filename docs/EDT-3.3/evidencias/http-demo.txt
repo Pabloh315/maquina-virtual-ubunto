@@ -1,0 +1,27 @@
+EVIDENCIA HTTP DE DEMO
+Fecha: 2026-10-28
+Servidor temporal: http://127.0.0.1:8015
+
+GET /api/health
+HTTP 200
+status=ok
+service=mantenimiento-vehiculos-api
+
+GET /api/database
+HTTP 200
+status=ok
+driver=pgsql
+
+GET /api/v1/vehicles
+HTTP 200
+total=6
+demo_plate=DEMO-001
+demo_category=Automóvil
+
+GET /
+HTTP 200
+title=Sistema de Gestión de Mantenimiento de Vehículos · Estado técnico
+
+Apagado:
+Servidor de demostración detenido correctamente.
+PortClosed=True

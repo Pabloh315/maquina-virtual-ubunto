@@ -1,0 +1,15 @@
+EVIDENCIA DE FRONTEND
+
+npm ci:
+- 56 paquetes instalados
+- 57 paquetes auditados
+- 0 vulnerabilidades
+
+npm run build:
+- vite v8.3.5
+- 3 módulos transformados
+- compilación final: 688 ms
+- manifest, CSS, JavaScript y fuentes generados en public/build
+
+Aviso no bloqueante:
+El plugin de fuentes informa que `fontaine` es opcional para fallbacks optimizados.
