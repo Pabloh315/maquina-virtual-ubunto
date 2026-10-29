@@ -1,0 +1,32 @@
+{
+  "user": {"id": "u1", "role": "owner", "name": "Conductor"},
+  "vehicles": [
+    {"id":"v1","plate":"4581-KYT","brand":"Toyota","model":"Hilux","category":"pickup","year":2020,"odometer_km":82400,"fuel":"Diésel"},
+    {"id":"v2","plate":"2754-HDL","brand":"Suzuki","model":"Vitara","category":"suv","year":2018,"odometer_km":114500,"fuel":"Gasolina"}
+  ],
+  "plans": [
+    {"id":"p1","vehicle_id":"v1","service":"oil_change","interval_km":10000,"interval_months":6,"source":"manual_fabricante","last_confirmed_km":77900,"last_confirmed_date":"2026-07-12","next_due_km":87900,"next_due_date":"2027-01-12","rule":"first_limit"},
+    {"id":"p2","vehicle_id":"v1","service":"brakes","interval_km":20000,"interval_months":12,"source":"manual_fabricante","next_due_km":90000,"next_due_date":"2026-10-28","rule":"first_limit"},
+    {"id":"p3","vehicle_id":"v2","service":"oil_change","interval_km":10000,"interval_months":6,"source":"manual_fabricante","next_due_km":115000,"next_due_date":"2026-11-15","rule":"first_limit"}
+  ],
+  "alerts": [
+    {"id":"a1","vehicle_id":"v1","service":"oil_change","status":"upcoming","reason":"Restan 5.500 km"},
+    {"id":"a2","vehicle_id":"v1","service":"brakes","status":"upcoming","reason":"Revisión programada para el 28 de octubre"},
+    {"id":"a3","vehicle_id":"v2","service":"oil_change","status":"upcoming","reason":"Restan 500 km"}
+  ],
+  "workshops": [
+    {"id":"t1","name":"Taller Mecánico Norte","specialties":["oil_change","brakes","general"],"verified_brands":[],"address":"Av. Norte 250 · Cochabamba","schedule":"Lun–Vie · 08:00 a 18:00"},
+    {"id":"t2","name":"AutoServicio Central","specialties":["oil_change","air_filter","general"],"verified_brands":["Toyota"],"address":"Calle Central 120 · Cochabamba","schedule":"Lun–Sáb · 08:30 a 17:30"},
+    {"id":"t3","name":"Frenos del Valle","specialties":["brakes"],"verified_brands":[],"address":"Av. del Valle 410 · Cochabamba","schedule":"Lun–Vie · 09:00 a 18:00"}
+  ],
+  "appointments": [
+    {"id":"c1","vehicle_id":"v1","workshop_id":"t1","service":"brakes","starts_at":"2026-10-28T09:00:00-04:00","status":"confirmed"},
+    {"id":"c2","vehicle_id":"v1","workshop_id":"t2","service":"oil_change","starts_at":"2026-09-10T14:30:00-04:00","status":"finished"}
+  ],
+  "history": [
+    {"id":"h1","vehicle_id":"v1","service":"air_filter","date":"2026-09-14","odometer_km":80750,"cost":120,"order_id":"o1","status":"confirmed"},
+    {"id":"h2","vehicle_id":"v1","service":"oil_change","date":"2026-07-12","odometer_km":77900,"cost":350,"order_id":"o2","status":"confirmed"},
+    {"id":"h3","vehicle_id":"v1","service":"brakes","date":"2026-05-06","odometer_km":73500,"cost":480,"order_id":"o3","status":"confirmed"}
+  ],
+  "backgrounds": []
+}
