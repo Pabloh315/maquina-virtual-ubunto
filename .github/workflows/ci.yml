@@ -1,0 +1,96 @@
+name: CI Laravel
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  tests:
+    name: PHP, PostgreSQL y frontend
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_DB: mantenimiento_vehiculos_test
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d mantenimiento_vehiculos_test"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    defaults:
+      run:
+        working-directory: web
+
+    env:
+      APP_ENV: testing
+      APP_DEBUG: false
+      DB_CONNECTION: pgsql
+      DB_HOST: 127.0.0.1
+      DB_PORT: 5432
+      DB_DATABASE: mantenimiento_vehiculos_test
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgres
+      CACHE_STORE: array
+      QUEUE_CONNECTION: sync
+      SESSION_DRIVER: array
+
+    steps:
+      - name: Obtener código
+        uses: actions/checkout@v7
+
+      - name: Preparar PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.5'
+          extensions: mbstring, pdo_pgsql, pgsql
+          tools: composer:v2
+          coverage: none
+        env:
+          fail-fast: true
+
+      - name: Preparar Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+
+      - name: Preparar entorno Laravel
+        run: cp .env.example .env
+
+      - name: Validar e instalar dependencias PHP
+        run: |
+          composer validate --strict
+          composer install --no-interaction --prefer-dist --no-progress
+
+
+      - name: Generar clave de la aplicación
+        run: php artisan key:generate --force --no-interaction
+      - name: Auditar dependencias PHP
+        run: composer audit --locked --no-interaction
+
+      - name: Ejecutar migraciones
+        run: php artisan migrate --force --no-interaction
+
+      - name: Instalar y compilar frontend
+        run: |
+          npm ci
+          npm run build
+
+      - name: Verificar rutas API
+        run: php artisan route:list --path=api --except-vendor
+
+      - name: Ejecutar pruebas
+        run: php artisan test --compact

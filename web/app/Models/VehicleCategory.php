@@ -1,5 +1,21 @@
 <?php
+
 namespace App\Models;
+
+use Database\Factories\VehicleCategoryFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-class VehicleCategory extends Model { protected $fillable = ['name','description']; public function vehicles(): HasMany { return $this->hasMany(Vehicle::class); } }
+
+class VehicleCategory extends Model
+{
+    /** @use HasFactory<VehicleCategoryFactory> */
+    use HasFactory;
+
+    protected $fillable = ['name', 'description'];
+
+    public function vehicles(): HasMany
+    {
+        return $this->hasMany(Vehicle::class);
+    }
+}
