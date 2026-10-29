@@ -1,0 +1,9 @@
+EVIDENCIA GIT LOCAL
+
+Rama: feature/3.3-api-web-ci
+Commit de implementación: f60b7e4
+Mensaje: feat(edt-3.3): implementar API web CI y demo local
+
+Operaciones remotas realizadas: ninguna.
+No se ejecutó push, pull, fetch, merge ni se creó PR.
+La carpeta preexistente tmp/ quedó fuera del staging y de los commits.

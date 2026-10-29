@@ -1,0 +1,14 @@
+EVIDENCIA DE ENTORNO — EDT 3.3
+Fecha local: 2026-10-28 (America/La_Paz)
+
+PHP 8.5.12 (cli) NTS Visual C++ 2022 x64
+Laravel Framework 13.39.0
+Composer version 2.8.12
+psql (PostgreSQL) 17.11
+Node.js v24.19.0
+npm 11.17.0
+Vite 8.3.5
+
+Extensión verificada: pdo_pgsql
+Base de desarrollo: PostgreSQL local, puerto 5433
+Base de pruebas: mantenimiento_vehiculos_test, separada de desarrollo

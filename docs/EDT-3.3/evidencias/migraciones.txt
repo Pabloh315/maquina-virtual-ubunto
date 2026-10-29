@@ -1,0 +1,12 @@
+EVIDENCIA DE MIGRACIONES
+Comando: php artisan migrate:status --no-ansi
+
+[1] Ran  0001_01_01_000000_create_users_table
+[1] Ran  0001_01_01_000001_create_cache_table
+[1] Ran  0001_01_01_000002_create_jobs_table
+[1] Ran  2026_10_28_000100_create_identity_and_vehicle_reference_tables
+[1] Ran  2026_10_28_000200_create_maintenance_and_alert_tables
+[1] Ran  2026_10_28_000300_create_workshop_and_appointment_tables
+[1] Ran  2026_10_28_000400_create_service_order_and_inspection_tables
+
+Resultado: 7/7 migraciones ejecutadas.

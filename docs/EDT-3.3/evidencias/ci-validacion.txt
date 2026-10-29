@@ -1,0 +1,17 @@
+EVIDENCIA DE CI
+
+Archivo: .github/workflows/ci.yml
+Parser YAML local: válido
+Servicios declarados: PostgreSQL 17
+Runtime declarado: PHP 8.5, Composer 2, Node.js 24
+
+Comandos equivalentes ejecutados localmente:
+- composer validate
+- composer install/audit
+- artisan migrate y route:list
+- npm ci y npm run build
+- artisan test --compact
+
+Resultado local: aprobado.
+Resultado remoto GitHub Actions: NO EJECUTADO.
+Motivo: no se realizó push ni PR por alcance y seguridad del hito.
