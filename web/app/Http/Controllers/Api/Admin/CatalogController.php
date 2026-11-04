@@ -1,0 +1,9 @@
+<?php
+namespace App\Http\Controllers\Api\Admin;
+use App\Http\Controllers\Controller; use App\Models\Make; use App\Models\VehicleCategory; use App\Models\VehicleModel; use Illuminate\Http\Request;
+class CatalogController extends Controller {
+ private function model(string $type): string { return match($type){'brands'=>Make::class,'categories'=>VehicleCategory::class,'models'=>VehicleModel::class,default=>abort(404)}; }
+ public function index(string $type){$m=$this->model($type);return response()->json(['data'=>$m::query()->orderBy('name')->get()]);}
+ public function store(Request $r,string $type){$m=$this->model($type);$rules=['name'=>['required','string','max:100']];if($type==='models')$rules['make_id']=['required','integer','exists:makes,id'];if($type==='categories')$rules['description']=['nullable','string','max:255'];$d=$r->validate($rules);$unique=$type==='models'?['make_id'=>$d['make_id'],'name'=>$d['name']]:['name'=>$d['name']];if($m::where($unique)->exists())return response()->json(['message'=>'El registro ya existe.'],409);return response()->json(['data'=>$m::create($d)],201);}
+ public function update(Request $r,string $type,int $id){$m=$this->model($type);$x=$m::findOrFail($id);$rules=['name'=>['required','string','max:100']];if($type==='models')$rules['make_id']=['required','integer','exists:makes,id'];if($type==='categories')$rules['description']=['nullable','string','max:255'];$d=$r->validate($rules);$q=$m::where('name',$d['name'])->whereKeyNot($id);if($type==='models')$q->where('make_id',$d['make_id']);if($q->exists())return response()->json(['message'=>'El registro ya existe.'],409);$x->update($d);return response()->json(['data'=>$x]);}
+}

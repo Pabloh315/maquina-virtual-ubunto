@@ -1,0 +1,5 @@
+@extends('layouts.app')
+@section('title','Administración')
+@section('content')
+<div class="mx-auto max-w-6xl px-5 py-10"><h1 class="text-3xl font-bold">Administración</h1><p class="mt-2 text-slate-600">Cuentas y catálogos básicos. Las operaciones API requieren token y permiso.</p><div class="mt-8 grid gap-6 md:grid-cols-2"><section class="rounded-xl bg-white p-5 shadow"><h2 class="font-semibold">Usuarios</h2><ul class="mt-3 text-sm">@foreach($users as $user)<li>{{ $user->name }} — {{ $user->email }} ({{ $user->roles->pluck('name')->join(', ') }})</li>@endforeach</ul></section><section class="rounded-xl bg-white p-5 shadow"><h2 class="font-semibold">Catálogos</h2><p class="mt-3 text-sm">Marcas: {{ $brands->pluck('name')->join(', ') ?: 'sin registros' }}</p><p class="mt-2 text-sm">Categorías: {{ $categories->pluck('name')->join(', ') ?: 'sin registros' }}</p></section></div></div>
+@endsection

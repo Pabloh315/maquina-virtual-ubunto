@@ -1,0 +1,3 @@
+<?php
+namespace App\Http\Controllers\Web; use App\Http\Controllers\Controller; use App\Models\Make; use App\Models\Role; use App\Models\User; use App\Models\VehicleCategory; use Illuminate\Contracts\View\View;
+class AdminController extends Controller { public function index():View{return view('admin.index',['users'=>User::with('roles')->paginate(15),'roles'=>Role::orderBy('name')->get(),'brands'=>Make::orderBy('name')->get(),'categories'=>VehicleCategory::orderBy('name')->get()]);} }
