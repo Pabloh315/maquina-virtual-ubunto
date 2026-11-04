@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Make;
+use App\Models\Role;
 use App\Models\User;
 use App\Models\Vehicle;
 use App\Models\VehicleCategory;
@@ -16,8 +17,8 @@ class Edt33DemoSeeder extends Seeder
     public function run(): void
     {
         $category = VehicleCategory::updateOrCreate(
-            ['name' => 'Automóvil'],
-            ['description' => 'Vehículo liviano de demostración'],
+            ['name' => 'AutomÃƒÂ³vil'],
+            ['description' => 'VehÃƒÂ­culo liviano de demostraciÃƒÂ³n'],
         );
         $make = Make::firstOrCreate(['name' => 'Toyota']);
         $vehicleModel = VehicleModel::firstOrCreate([
@@ -27,10 +28,12 @@ class Edt33DemoSeeder extends Seeder
         $owner = User::firstOrCreate(
             ['email' => 'propietario.demo@example.test'],
             [
-                'name' => 'Propietario de demostración',
+                'name' => 'Propietario de demostraciÃƒÂ³n',
                 'password' => Hash::make(Str::password(32)),
             ],
         );
+
+        $owner->roles()->syncWithoutDetaching([Role::where('name', 'owner')->value('id')]);
 
         Vehicle::updateOrCreate(
             ['license_plate' => 'DEMO-001'],
