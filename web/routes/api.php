@@ -21,9 +21,15 @@ Route::middleware('throttle:api')->group(function (): void {
             ->middleware('permission:vehicles.view')->name('api.access-check');
 
         Route::prefix('v1')->name('api.v1.')->group(function (): void {
-            Route::get('vehicles', [VehicleController::class, 'index'])->middleware('permission:vehicles.view');
-            Route::get('vehicles/{vehicle}', [VehicleController::class, 'show'])->middleware('permission:vehicles.view');
-            Route::post('vehicles', [VehicleController::class, 'store'])->middleware('permission:vehicles.create');
+            Route::get('vehicles', [VehicleController::class, 'index'])
+                ->middleware('permission:vehicles.view')
+                ->name('vehicles.index');
+            Route::get('vehicles/{vehicle}', [VehicleController::class, 'show'])
+                ->middleware('permission:vehicles.view')
+                ->name('vehicles.show');
+            Route::post('vehicles', [VehicleController::class, 'store'])
+                ->middleware('permission:vehicles.create')
+                ->name('vehicles.store');
         });
     });
 });
