@@ -1,0 +1,20 @@
+{
+  "date": "2026-10-29",
+  "flutter_analyze": "passed_no_issues",
+  "flutter_unit_widget_tests": 26,
+  "flutter_tests_result": "passed",
+  "android_real_api_integration": "passed",
+  "verified_http_statuses": [
+    200,
+    201,
+    404,
+    422
+  ],
+  "postgresql_restart_persistence": "passed",
+  "apk_installed_device": "emulator-5554",
+  "apk_package": "com.example.movil",
+  "installed_version_code": 19,
+  "normal_app_process_verified": true,
+  "peer_review": "pending",
+  "github_commit_and_pull_request": "pending"
+}

@@ -1,112 +1,78 @@
 # AutoCare móvil
 
-Base Flutter Android de la issue #17 (EDT 3.2): doce pantallas base, navegación y consumo de una API simulada. La aplicación arranca en modo demostración y no necesita un servidor.
+Aplicación Flutter Android del Sistema de Gestión de Mantenimiento de Vehículos. La EDT 3.4 (issue #19) conecta con la API Laravel real de la EDT 3.3 y PostgreSQL. Conserva los doce recorridos simulados de EDT 3.2 como modo separado.
 
-## Instalación y ejecución
+## Ejecutar la integración real
 
-Requisitos: Flutter 3.38.4 con Dart 3.10.3 o una versión compatible con `pubspec.yaml`, Android SDK y un emulador o dispositivo Android. Abrir `movil/` en Android Studio con los plugins de Flutter y Dart.
+Requisitos: Flutter 3.38.4 / Dart 3.10.3 o versiones compatibles con `pubspec.yaml`, Android SDK y un emulador Android. La API debe estar encendida en el equipo anfitrión.
 
-Desde la raíz del repositorio:
+Desde la raíz del repositorio, después de preparar el backend según [la guía EDT 3.4](docs/edt34/README.md):
 
 ```powershell
 cd movil
 flutter pub get
-flutter doctor -v
 flutter devices
 flutter run -d emulator-5554
 ```
 
-Reemplazar el dispositivo por el que muestre `flutter devices`. Si el emulador está apagado, ejecutar `flutter emulators` y `flutter emulators --launch Pixel_7` con el identificador disponible en el equipo.
+Por defecto se usa `API_MODE=http` y `http://10.0.2.2:8000/api`. El botón **Conectar con API** comprueba el servicio, la conexión PostgreSQL y obtiene los vehículos. Cada ficha se consulta nuevamente por su ID. El formulario registra un vehículo real; requiere IDs existentes de propietario, categoría y modelo y muestra los errores de validación del servidor.
 
-Si Flutter informa `Could not determine java version`, seleccionar un JDK válido de Android Studio. En el equipo de desarrollo se encontró válido el de Android Studio2. Para una sesión de PowerShell:
+Esta es una entrada técnica sin login porque la API actual todavía no ofrece autenticación. Usa exclusivamente datos ficticios y un servidor de desarrollo. No se llama a endpoints inexistentes ni se sustituyen errores reales por datos simulados.
+
+La base de la URL termina en `/api`; el cliente agrega `/v1/vehicles` para los vehículos. Para otro servidor HTTPS:
+
+```powershell
+flutter run --dart-define=API_MODE=http --dart-define=API_BASE_URL=https://SERVIDOR_REAL/api
+```
+
+El HTTP local se permite en compilaciones debug únicamente para `10.0.2.2`, `127.0.0.1` y `localhost`. No se deshabilita la verificación de certificados HTTPS. Los APK release requieren HTTPS; la entrega técnica es un APK debug.
+
+Si el Java de Android Studio no funciona, en el equipo de desarrollo se verificó esta ruta. Ajustarla a la instalación de cada equipo:
 
 ```powershell
 $env:JAVA_HOME = 'C:\Program Files\Android\Android Studio2\jbr'
 flutter run -d emulator-5554
 ```
 
-La ruta depende de la instalación de cada equipo. No se requiere guardar una ruta personal en el proyecto ni cambiar la configuración global de Git.
+## Ejecutar la demostración simulada de EDT 3.2
 
-## Cuenta de demostración
+```powershell
+flutter run --dart-define=API_MODE=mock
+```
 
-- Correo: `demo@ejemplo.test`
-- Contraseña: `clave_demo`
-
-El botón **Usar cuenta de demostración** completa los campos. Las demás credenciales producen un error de acceso. Todos los datos son ficticios. Los cambios se conservan en memoria y se reinician al cerrar completamente el proceso; no existe sincronización offline.
-
-## Pantallas y recorridos
-
-Acceso → Inicio. La barra principal conecta Inicio, Vehículos, Talleres e Historial.
-
-- Inicio permite abrir alertas, citas, ficha del vehículo y registro de antecedentes.
-- Vehículos → ficha → actualización de kilometraje, mantenimientos o historial.
-- Mantenimiento → registro de antecedente conocido o desconocido.
-- Talleres → detalle → agendar cita → mis citas. Las citas confirmadas permiten cancelación con confirmación.
-- Alertas → mantenimientos. Historial permite seleccionar vehículo y copiar los servicios confirmados.
-- El menú de cuenta en Inicio permite cerrar sesión.
-
-Las doce pantallas base corresponden a los mockups de M01. La base visual usa el azul y los componentes comunes de la referencia. Debe realizarse una revisión visual conjunta posterior para confirmar fidelidad, dado que la cuota de Figma impidió consultar nuevamente todos los detalles. Se utiliza la tipografía del sistema.
-
-El alta real de usuarios, recuperación de contraseña y alta de vehículos se señalan como próximas etapas desde la interfaz; no se simula que esas operaciones se hayan ejecutado. Los recorridos de la base usan los dos vehículos de prueba existentes. Reportes con fotografías, seguimiento de órdenes y reprogramación transaccional pertenecen a entregas posteriores.
+Cuenta ficticia: `demo@ejemplo.test` / `clave_demo`. El botón **Usar cuenta de demostración** completa los campos. Esta modalidad mantiene inicio, vehículos, mantenimiento, antecedentes, alertas, talleres, citas e historial. Los cambios son locales en memoria y se reinician con el proceso. No se mezclan estos registros con PostgreSQL.
 
 ## Estructura
 
 ```text
-lib/
-  app/                 # Estado compartido, rutas y composición de la aplicación
-  core/api/            # Cliente, errores y transporte HTTP intercambiable
-  core/config/         # Configuración por dart-define
-  core/theme/          # Colores y estilos comunes
-  data/models/         # Modelos tipados desde JSON
-  data/mock/           # Transporte simulado con latencia y reglas
-  data/repositories/   # Consultas utilizadas por las pantallas
-  features/            # Pantallas agrupadas por funcionalidad
-  shared/              # Componentes y formatos compartidos
-assets/mock/api.json    # Datos ficticios alineados al contrato propuesto
-test/                   # Pruebas de navegación y reglas del simulador
-integration_test/       # Recorrido reproducible en Android
+lib/app/                   Estado y rutas del modo simulado, selección de modalidad
+lib/core/api/              Transporte HTTP, cliente y errores
+lib/core/config/           URL, modalidad y política de HTTP local
+lib/core/theme/            Estilos comunes
+lib/data/models/           Modelos Dart y adaptación del recurso Laravel
+lib/data/repositories/     Repositorios independientes para API real y simulador
+lib/data/mock/             Datos y reglas simuladas de EDT 3.2
+lib/features/integration/  Conexión, listado, detalle y alta reales
+lib/features/              Pantallas de EDT 3.2
+test/                      Pruebas de contratos, transporte y widgets
+integration_test/          Recorridos Android simulados y contra API real
 ```
 
-## Contrato y conexión futura
+La adaptación real consume IDs numéricos como strings opacos en Flutter, `license_plate`, `current_mileage`, relaciones `category/model/make` y paginación Laravel `current_page/last_page`. Los errores aceptan el sobre propuesto de EDT 2.4 y el formato efectivo Laravel `message/errors`.
 
-La base sigue el documento suministrado **AutoCare EDT 2.4 Contrato API y Revisión Web Móvil FINAL**. Es una propuesta que E1 y E2 deben validar con el modelo de datos real. `https://api.example.invalid/api/v1` es un marcador no operativo.
+La autenticación, permisos por recurso, mantenimiento, talleres, citas y demás endpoints reales se incorporarán cuando el backend los implemente. El contrato inicial de EDT 2.4 era una propuesta; esta entrega documenta las diferencias efectivas sin modificar las rutas del equipo.
 
-El cliente usa JSON con sobres `{data, meta?}`, IDs string opacos, `page/page_size`, cabecera Bearer y errores `ApiException` con estado, `code`, `message`, `details` y `requestId`. Los repositorios convierten `snake_case` a modelos Dart y recorren todas las páginas informadas por `meta.total`.
-
-La implementación simulada cubre acceso y cierre de sesión; consultas de vehículos, planes, alertas, talleres, citas e historial; actualización de odómetro; registro de antecedentes; reserva y cancelación de citas. Usa las rutas propuestas en el documento. Los horarios incluyen `-04:00` y se muestran en America/La_Paz independientemente de la zona del dispositivo.
-
-El transporte HTTP nativo está preparado para Android y Windows. Cuando E2 confirme un servidor HTTPS y el contrato, se puede probar explícitamente con:
-
-```powershell
-flutter run --dart-define=API_MODE=http --dart-define=API_BASE_URL=https://SERVIDOR_REAL/api/v1
-```
-
-El adaptador envía las mismas consultas que el simulador. No se probó con un servidor real. Antes de habilitar autenticación real faltan renovación de tokens, almacenamiento seguro, validación de roles y permisos del servidor y acuerdo definitivo de los campos. El token de esta base vive solo en memoria.
-
-Los campos de presentación no definidos expresamente por los ejemplos del contrato —nombre del usuario, combustible, dirección, horario, detalles de historial y observaciones del antecedente— son extensiones locales del fixture que deberán confirmarse con E2. `verified_brands` describe una verificación de marca, no una especialidad declarada; en el fixture toda esa información es ficticia.
-
-## Reglas verificables
-
-- Una lectura menor de odómetro devuelve `409 ODOMETER_REVIEW_REQUIRED` y conserva la lectura anterior.
-- Un plan vence cuando se alcanza el primero de sus límites, fecha o kilómetros.
-- Registrar un antecedente no modifica historial confirmado ni reinicia intervalos.
-- Una reserva usa `Idempotency-Key`. Repetir una reserva confirmada con la misma clave devuelve el resultado previo; otra reserva en el mismo cupo devuelve `409 SLOT_UNAVAILABLE`.
-- Cancelar una cita confirmada libera el horario en el simulador. El backend real deberá garantizar transacciones y permisos.
-- Los antecedentes desconocidos envían `known: false` y `date: null`.
-
-## Comprobaciones y evidencia
+## Comprobaciones y entrega
 
 ```powershell
 flutter analyze
 flutter test
+flutter drive --driver=test_driver/real_api_driver.dart --target=integration_test/real_api_test.dart -d emulator-5554
 flutter build apk --debug
-flutter drive --driver=test_driver/integration_test.dart --target=integration_test/app_test.dart -d emulator-5554
 ```
 
-La prueba de integración recorre las pantallas y guarda capturas de acceso, inicio e historial en `docs/evidence/`. Las pruebas automatizadas no sustituyen la revisión del compañero.
+- [Configuración, pruebas, APK y evidencia de EDT 3.4](docs/edt34/README.md).
+- [Validación histórica de EDT 3.2](docs/VALIDACION_17.md).
+- [Capturas de EDT 3.2](docs/evidence/).
 
-## Entrega en GitHub
-
-Trabajar en `feature/17-movil-inicializacion-navegacion-datos-simulados`. Revisar los archivos con `git status` antes de registrar la entrega y crear un Pull Request hacia `develop` con `Refs #17`, los resultados reales de comprobación y las capturas disponibles. Solicitar revisión al compañero. La issue no está aprobada hasta obtener esa revisión.
-
-Mantener `pubspec.lock` versionado y excluir archivos generados, credenciales, `local.properties` y claves de firma. Los commits deben usar la identidad Git del contribuyente, sin coautores automáticos.
+Trabajar en `feature/19-movil-api-real-apk-pruebas` y entregar mediante PR hacia `develop`. La revisión y aprobación del compañero siguen siendo un paso humano. Mantener `pubspec.lock` versionado; los secretos, bases locales, dependencias y artefactos de compilación quedan ignorados por Git. Usar la identidad Git del contribuyente, sin coautores automáticos.

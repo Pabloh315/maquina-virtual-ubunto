@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../../app/app_routes.dart';
 import '../../app/app_scope.dart';
-import '../../core/config/app_config.dart';
 import '../../core/theme/app_theme.dart';
 import '../../shared/widgets.dart';
 
@@ -72,7 +71,7 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         ),
         const SizedBox(height: 22),
-        if (AppConfig.isMock) ...[
+        ...[
           const Notice(
             'Modo demostración · Los cambios se guardan solo durante esta ejecución.',
           ),

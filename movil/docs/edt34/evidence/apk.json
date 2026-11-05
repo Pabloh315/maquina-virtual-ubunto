@@ -1,0 +1,11 @@
+{
+  "date": "2026-10-29",
+  "artifact": "movil/build/edt34/autocare-edt34-tecnico.apk",
+  "version_name": "1.0.0",
+  "version_code": 19,
+  "type": "debug",
+  "api_mode": "http",
+  "api_base_url": "http://10.0.2.2:8000/api",
+  "bytes": 63040793,
+  "sha256": "cd29bca0138d316cf84a131e163b9f0cf37599eda9efcaf791bef7fed5127d39"
+}

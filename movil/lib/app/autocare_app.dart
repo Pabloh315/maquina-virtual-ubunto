@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 import '../core/api/api_client.dart';
-import '../core/api/http_api_transport.dart';
 import '../core/config/app_config.dart';
 import '../core/theme/app_theme.dart';
 import '../data/mock/mock_api_transport.dart';
 import '../data/repositories/autocare_repository.dart';
+import '../data/repositories/real_api_repository.dart';
+import '../features/integration/real_api_app.dart';
 import '../features/auth/login_screen.dart';
 import '../features/dashboard/home_screen.dart';
 import '../features/vehicles/vehicle_screens.dart';
@@ -21,32 +22,36 @@ import 'app_routes.dart';
 import 'app_scope.dart';
 
 class AutoCareApp extends StatefulWidget {
-  const AutoCareApp({super.key, this.repository});
+  const AutoCareApp({
+    super.key,
+    this.repository,
+    this.realRepository,
+    this.useMock,
+  });
   final AutoCareRepository? repository;
+  final RealApiRepository? realRepository;
+  final bool? useMock;
   @override
   State<AutoCareApp> createState() => _AutoCareAppState();
 }
 
 class _AutoCareAppState extends State<AutoCareApp> {
   late final AppController _controller;
+  late final bool _useMock;
   @override
   void initState() {
     super.initState();
+    _useMock =
+        widget.useMock ?? (widget.repository != null || AppConfig.isMock);
+    if (!_useMock) return;
     _controller = AppController(
-      widget.repository ??
-          AutoCareRepository(
-            ApiClient(
-              AppConfig.isMock
-                  ? MockApiTransport()
-                  : HttpApiTransport(Uri.parse(AppConfig.baseUrl)),
-            ),
-          ),
+      widget.repository ?? AutoCareRepository(ApiClient(MockApiTransport())),
     );
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    if (_useMock) _controller.dispose();
     super.dispose();
   }
 
@@ -79,16 +84,18 @@ class _AutoCareAppState extends State<AutoCareApp> {
   }
 
   @override
-  Widget build(BuildContext context) => AppScope(
-    controller: _controller,
-    child: MaterialApp(
-      title: 'AutoCare',
-      debugShowCheckedModeBanner: false,
-      theme: buildTheme(),
-      locale: const Locale('es', 'BO'),
-      supportedLocales: const [Locale('es', 'BO')],
-      localizationsDelegates: GlobalMaterialLocalizations.delegates,
-      onGenerateRoute: _route,
-    ),
-  );
+  Widget build(BuildContext context) => !_useMock
+      ? RealApiApp(repository: widget.realRepository)
+      : AppScope(
+          controller: _controller,
+          child: MaterialApp(
+            title: 'AutoCare',
+            debugShowCheckedModeBanner: false,
+            theme: buildTheme(),
+            locale: const Locale('es', 'BO'),
+            supportedLocales: const [Locale('es', 'BO')],
+            localizationsDelegates: GlobalMaterialLocalizations.delegates,
+            onGenerateRoute: _route,
+          ),
+        );
 }
