@@ -3,6 +3,9 @@
 namespace Tests\Feature\Http\Controllers\Api\V1;
 
 use App\Models\User;
+use App\Models\Permission;
+use App\Models\Role;
+use Laravel\Sanctum\Sanctum;
 use App\Models\Vehicle;
 use App\Models\VehicleCategory;
 use App\Models\VehicleModel;
@@ -12,6 +15,17 @@ use Tests\TestCase;
 class VehicleControllerTest extends TestCase
 {
     use LazilyRefreshDatabase;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $permissions = collect(['vehicles.view', 'vehicles.create'])->map(fn ($name) => Permission::create(['name' => $name]));
+        $role = Role::create(['name' => 'vehicle-manager']);
+        $role->permissions()->sync($permissions->pluck('id'));
+        $user = User::factory()->create();
+        $user->roles()->attach($role);
+        Sanctum::actingAs($user);
+    }
 
     public function test_returns_200_with_paginated_vehicles_and_reference_data(): void
     {

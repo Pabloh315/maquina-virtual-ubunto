@@ -1,0 +1,3 @@
+﻿Prueba aislada de autenticación: 9 pruebas, 30 aserciones, exitosa.
+Prueba de vehículos protegidos: 7 pruebas, 50 aserciones, exitosa.
+Prueba normal PostgreSQL: no iniciada; PHP local no incluye pdo_pgsql.
