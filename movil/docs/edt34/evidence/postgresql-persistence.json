@@ -1,0 +1,13 @@
+{
+  "date": "2026-10-29",
+  "database": "mantenimiento_vehiculos_edt34",
+  "driver": "pgsql",
+  "server_restart_verified": true,
+  "sql_vehicle": {
+    "id": 2,
+    "license_plate": "EDT19-1793279548774",
+    "current_mileage": 12600
+  },
+  "api_get_status": 200,
+  "result": "passed"
+}

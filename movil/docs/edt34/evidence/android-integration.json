@@ -1,0 +1,78 @@
+{
+  "api_base_url": "http://10.0.2.2:8000/api",
+  "api_mode": "http",
+  "database_driver": "pgsql",
+  "created_vehicle": {
+    "id": "2",
+    "plate": "EDT19-1793279548774",
+    "odometer_km": 12600
+  },
+  "requests": [
+    {
+      "method": "GET",
+      "path": "/api/health",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/database",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/vehicles",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/vehicles",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/vehicles",
+      "status": 422
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/vehicles",
+      "status": 201
+    },
+    {
+      "method": "GET",
+      "path": "/api/health",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/database",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/vehicles",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/vehicles",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/vehicles/2",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/vehicles/2",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/vehicles/999999999",
+      "status": 404
+    }
+  ],
+  "result": "passed"
+}

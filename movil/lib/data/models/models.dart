@@ -10,6 +10,12 @@ class Vehicle {
     required this.year,
     required this.odometerKm,
     required this.fuel,
+    this.ownerId,
+    this.categoryId,
+    this.modelId,
+    this.vin,
+    this.color,
+    this.isActive = true,
   });
   factory Vehicle.fromJson(Json j) => Vehicle(
     id: j['id'] as String,
@@ -23,6 +29,29 @@ class Vehicle {
   );
   final String id, plate, brand, model, category, fuel;
   final int year, odometerKm;
+  final String? ownerId, categoryId, modelId, vin, color;
+  final bool isActive;
+  factory Vehicle.fromLaravel(Json j) {
+    final model = j['model'] as Json;
+    final make = model['make'] as Json;
+    final category = j['category'] as Json;
+    return Vehicle(
+      id: j['id'].toString(),
+      plate: j['license_plate'] as String,
+      brand: make['name'] as String,
+      model: model['name'] as String,
+      category: category['name'] as String,
+      year: j['year'] as int,
+      odometerKm: j['current_mileage'] as int,
+      fuel: j['fuel_type'] as String? ?? 'Sin especificar',
+      ownerId: j['owner_id'].toString(),
+      categoryId: category['id'].toString(),
+      modelId: model['id'].toString(),
+      vin: j['vin'] as String?,
+      color: j['color'] as String?,
+      isActive: j['is_active'] as bool,
+    );
+  }
   String get title => '$brand $model $year';
 }
 
