@@ -20,7 +20,7 @@ COPY public ./public
 COPY vite.config.js ./
 RUN npm run build
 
-FROM php:8.3-fpm-alpine AS app
+FROM php:8.4-fpm-alpine AS app
 
 RUN apk add --no-cache postgresql-libs \
     && apk add --no-cache --virtual .build-deps $PHPIZE_DEPS postgresql-dev \
