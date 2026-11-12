@@ -5,6 +5,8 @@ use App\Http\Controllers\Api\Admin\UserController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\DatabaseHealthController;
 use App\Http\Controllers\Api\HealthController;
+use App\Http\Controllers\Api\V1\MaintenanceHistoryController;
+use App\Http\Controllers\Api\V1\MaintenancePlanController;
 use App\Http\Controllers\Api\V1\VehicleController;
 use Illuminate\Support\Facades\Route;
 
@@ -53,6 +55,23 @@ Route::middleware('throttle:api')->group(function (): void {
             Route::post('vehicles', [VehicleController::class, 'store'])
                 ->middleware('permission:vehicles.create')
                 ->name('vehicles.store');
-        });
+            Route::get('vehicles/{vehicle}/maintenance-histories', [MaintenanceHistoryController::class, 'index'])
+                ->middleware('permission:vehicles.view')
+                ->name('vehicles.maintenance-histories.index');
+            Route::post('vehicles/{vehicle}/maintenance-histories', [MaintenanceHistoryController::class, 'store'])
+                ->middleware('permission:vehicles.create')
+                ->name('vehicles.maintenance-histories.store');
+            Route::get('vehicles/{vehicle}/maintenance-histories/{maintenanceHistory}', [MaintenanceHistoryController::class, 'show'])
+                ->middleware('permission:vehicles.view')
+                ->name('vehicles.maintenance-histories.show');
+            Route::get('vehicles/{vehicle}/maintenance-plans', [MaintenancePlanController::class, 'index'])
+                ->middleware('permission:vehicles.view')
+                ->name('vehicles.maintenance-plans.index');
+            Route::post('vehicles/{vehicle}/maintenance-plans', [MaintenancePlanController::class, 'store'])
+                ->middleware('permission:vehicles.create')
+                ->name('vehicles.maintenance-plans.store');
+            Route::get('vehicles/{vehicle}/maintenance-plans/{maintenancePlan}', [MaintenancePlanController::class, 'show'])
+                ->middleware('permission:vehicles.view')
+                ->name('vehicles.maintenance-plans.show');        });
     });
 });
