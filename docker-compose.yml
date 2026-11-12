@@ -1,0 +1,56 @@
+services:
+  api:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+      target: app
+    restart: unless-stopped
+    env_file:
+      - .env.production
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - laravel_storage:/var/www/storage
+    networks:
+      - private
+
+  nginx:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+      target: nginx
+    restart: unless-stopped
+    depends_on:
+      - api
+    ports:
+      - "80:80"
+    volumes:
+      - laravel_storage:/var/www/storage:ro
+    networks:
+      - private
+
+  db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:?Defina POSTGRES_DB en .env.production}
+      POSTGRES_USER: ${POSTGRES_USER:?Defina POSTGRES_USER en .env.production}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Defina POSTGRES_PASSWORD en .env.production}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      - private
+
+volumes:
+  laravel_storage:
+  postgres_data:
+
+networks:
+  private:
+    driver: bridge
